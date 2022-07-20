@@ -1,2 +1,25 @@
 # Render
-Software Renderer by Win32 and C++
+> Software Renderer by Win32 and C++
+
+## Rendering
+There are two ways to render:
+- object-order rendering
+- image-order rendering
+
+**Ray Tracing** is an image-order algorithm.
+
+### Steps of Ray Tracing
+1. ray generation (_Viewing Ray_)
+2. ray intersection
+3. shading
+
+## Done
+1. Ray-Sphere Intersection
+2. Ray-Triangle Intersection
+
+## Types of Lights
+- Point lights
+- Directional lights
+- Ambient lights
+- Area lights
+- Environment lights
