@@ -40,19 +40,16 @@ void Camera::rasterDeepImage(Byte *pFrameBuffer, const Scene& scene) const {
 void Camera::shadeRay(Byte* pFrameBuffer, const Scene& scene) const {
     int i = 0;
     Ray viewing_ray;
+    HitRecord hitRecord;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             generateViewingRay(x, y, &viewing_ray);
-            HitRecord hitRec, bestHitRec;
-            for (const auto &surface: scene.surfaces) {
-                surface->hit(viewing_ray, _near, _far, hitRec);
-                if (hitRec.t < bestHitRec.t) bestHitRec = hitRec;
-            }
-            if (bestHitRec.t != Surface::noHit) {
+            scene.hit(viewing_ray, _near, _far, hitRecord);
+            if (hitRecord.t != Surface::noHit) {
                 Color c;
                 for (const auto &light: scene.lights) {
-                    c.add_(light->illuminate(viewing_ray, bestHitRec));
-//                    std::cout << c << std::endl;
+//                    c.add_(light->illuminate(viewing_ray, hitRecord));
+                    c.add_(light->illuminate(viewing_ray, hitRecord, scene));
                 }
                 int r, g, b;
                 c.to256(&r, &g, &b);
@@ -75,4 +72,13 @@ void Scene::addSurface(Surface* surface) {
 }
 void Scene::addLight(Light *light) {
     this->lights.push_back(light);
+}
+
+void Scene::hit(const Ray &ray, float t0, float t1, HitRecord &hitRecord) const {
+    HitRecord hitRec;
+    hitRecord = hitRec;
+    for (const auto &surface: this->surfaces) {
+        surface->hit(ray, t0, t1, hitRec);
+        if (hitRec.t < hitRecord.t) hitRecord = hitRec;
+    }
 }

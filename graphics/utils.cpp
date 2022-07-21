@@ -7,6 +7,7 @@
 Vec3::Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 void Vec3::normalize_() {
     float len = this->length();
+    if (len == 0.0f) return;
     this->x /= len;
     this->y /= len;
     this->z /= len;
@@ -40,7 +41,7 @@ Vec3 Vec3::sub(const Vec3 &vec3) const {
     return Vec3(this->x-vec3.x, this->y-vec3.y, this->z-vec3.z);
 }
 Vec3 Vec3::divide(float s) const {
-    s = 1 / s;
+    s = 1 / (float)(s + 1e-8);
     return Vec3(this->x*s, this->y*s, this->z*s);
 }
 float Vec3::length() const {
@@ -87,20 +88,20 @@ Mat3::Mat3(float a, float b, float c, float d, float e, float f, float g, float 
  */
 Color::Color(float r, float g, float b) : r(r), g(g), b(b) {}
 void Color::multiply_(float s) {
-    this->r *= s;
-    this->g *= s;
-    this->b *= s;
+    r = min(r * s, 1.0f);
+    g = min(g * s, 1.0f);
+    b = min(b * s, 1.0f);
 }
 Color Color::multiply(float s) const {
-    return Color(r*s, g*s, b*s);
+    return Color(min(r*s, 1.0f), min(g*s, 1.0f), min(b*s, 1.0f));
 }
 Color Color::mix(const Color& color) const {
     return Color(r*color.r, g*color.g, b*color.b);
 }
 void Color::add_(const Color& color) {
-    r += color.r;
-    g += color.g;
-    b += color.b;
+    r = min(r + color.r, 1.0f);
+    g = min(g + color.g, 1.0f);
+    b = min(b + color.b, 1.0f);
 }
 void Color::to256(int *out_r, int *out_g, int *out_b) const {
     *out_r = (int) (r * 255);

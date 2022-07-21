@@ -13,6 +13,7 @@ public:
     std::vector<Light*> lights;
     void addSurface(Surface* surface);
     void addLight(Light* light);
+    void hit(const Ray& ray, float t0, float t1, HitRecord& hitRecord) const;
 };
 
 class Camera {
