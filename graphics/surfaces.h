@@ -33,7 +33,8 @@ public:
 class Triangle: Surface {
 public:
     Vec3 a, b, c;
-    Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c);
+    Vec3 normal;
+    Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c, Material* material);
     void hit(const Ray &ray, float t0, float t1, HitRecord &hitRecord) override;
 };
 

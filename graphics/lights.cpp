@@ -22,10 +22,9 @@ Color PointLight::illuminate(const Ray &ray, const HitRecord &hitRecord, const S
     l.normalize_();
 // Shadow Test
     HitRecord sRec;
-    scene.hit(Ray(x, l), 1e-8, Surface::noHit, sRec);
+    scene.hit(Ray(x, l), 0.1, Surface::noHit, sRec);
     if (sRec.t != Surface::noHit) return Color();
     Color E = I.multiply(max(0, hitRecord.normal.dot(l)) * (float)1e4 / (r*r));
-//    Color E = I.multiply(max(0, hitRecord.normal.dot(l)));
     Color k = hitRecord.surface->material->evaluate(l, ray.direction, hitRecord.normal);
     return k.mix(E);
 }

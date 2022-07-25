@@ -1,4 +1,5 @@
 #include "common.h"
+#include <assert.h>
 
 /**
  *  class Camera
@@ -53,6 +54,13 @@ void Camera::shadeRay(Byte* pFrameBuffer, const Scene& scene) const {
                 }
                 int r, g, b;
                 c.to256(&r, &g, &b);
+                pFrameBuffer[i  ] = b;
+                pFrameBuffer[i+1] = g;
+                pFrameBuffer[i+2] = r;
+                pFrameBuffer[i+3] = 0;
+            } else {
+                int r, g, b;
+                bgColor.to256(&r, &g, &b);
                 pFrameBuffer[i  ] = b;
                 pFrameBuffer[i+1] = g;
                 pFrameBuffer[i+2] = r;

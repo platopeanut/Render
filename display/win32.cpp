@@ -74,9 +74,13 @@ WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             pFrameBuffer = (Byte*) pImgData;
             hOldBitmap = (HBITMAP) SelectObject(hMemDC, hBitmap);
             memset(pFrameBuffer, 0, WIDTH*HEIGHT*4);
+            // API
+            init();
         }
             break;
         case WM_DESTROY: {
+            // API
+            destroy();
             // Detach Console
             FreeConsole();
             // Bitmap
@@ -89,6 +93,11 @@ WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             // End
             PostQuitMessage(0);
         }
+            break;
+        case WM_KEYDOWN:
+            if (onKeyDown(wParam)) {
+                BitBlt(hDC, 0, 0, WIDTH, HEIGHT, hMemDC, 0, 0, SRCCOPY);
+            }
             break;
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);

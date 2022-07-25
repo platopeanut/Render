@@ -45,7 +45,10 @@ void Sphere::hit(const Ray &ray, float t0, float t1, HitRecord &hitRecord) {
 /**
  *  class Triangle
  */
-Triangle::Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c) : a(a), b(b), c(c) {}
+Triangle::Triangle(const Vec3 &a, const Vec3 &b, const Vec3 &c, Material* material): a(a), b(b), c(c) {
+    this->material = material;
+    this->normal = b.sub(a).cross(c.sub(a)).normalize();
+}
 void Triangle::hit(const Ray &ray, float t0, float t1, HitRecord &hitRecord) {
     Mat3 A(a.x-b.x, a.x-c.x, ray.direction.x,
            a.y-b.y, a.y-c.y, ray.direction.y,
@@ -69,7 +72,7 @@ void Triangle::hit(const Ray &ray, float t0, float t1, HitRecord &hitRecord) {
             if (_b >= 0 && _b <= 1 - _y) {
                 hitRecord.t = _t;
                 hitRecord.surface = this;
-                hitRecord.normal = Vec3();  // TODO
+                hitRecord.normal = this->normal;
                 return;
             }
         }

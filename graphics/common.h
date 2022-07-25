@@ -27,6 +27,7 @@ public:
     float _near, _far, distance; // distance between viewpoint and image plane
     // eye:viewpoint, view:view direction, up:up direction, right: right direction
     Vec3 eye, view, up, right;
+    Color bgColor = Color((float)135/255,(float)206/255,(float)235/255);
     Camera(const Vec3 &eye, const Vec3 &view, const Vec3 &up, int width, int height, float distance, float near, float far);
     void generateViewingRay(int i, int j, Ray* ray) const;
     void rasterDeepImage(Byte* pFrameBuffer, const Scene& scene) const;

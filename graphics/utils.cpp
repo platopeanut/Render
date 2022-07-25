@@ -12,6 +12,12 @@ void Vec3::normalize_() {
     this->y /= len;
     this->z /= len;
 }
+Vec3 Vec3::normalize() const {
+    float len = this->length();
+    if (len == 0.0f) return Vec3();
+    return Vec3(x / len, y / len, z / len);
+}
+
 float Vec3::dot(const Vec3 &vec3) const {
     return this->x*vec3.x + this->y*vec3.y + this->z*vec3.z;
 }

@@ -22,7 +22,10 @@ extern Byte* pFrameBuffer;
 #define Log(info) WriteConsole(hConsole, info, sizeof(info), NULL, NULL)
 
 /* External Interface (Implemented in main.cpp) */
+void init();
+void destroy();
 void render();
+bool onKeyDown(WPARAM wParam);
 
 
 #endif //RENDER_WIN32_H

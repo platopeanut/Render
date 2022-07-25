@@ -15,6 +15,7 @@ public:
     float x, y, z;
     explicit Vec3(float x=0, float y=0, float z=0);
     void normalize_();
+    Vec3 normalize() const;
     float length() const;
     float dot(const Vec3& vec3) const;
     Vec3 cross(const Vec3& vec3) const;
