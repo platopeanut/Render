@@ -1,5 +1,5 @@
-#ifndef RENDER_DEFS_H
-#define RENDER_DEFS_H
+#ifndef RENDER_WIN32_H
+#define RENDER_WIN32_H
 
 #include <windows.h>
 #define WNDCLASS_NAME TEXT("Window Class")
@@ -21,7 +21,8 @@ extern Byte* pFrameBuffer;
 
 #define Log(info) WriteConsole(hConsole, info, sizeof(info), NULL, NULL)
 
-/* External Interface */
+/* External Interface (Implemented in main.cpp) */
 void render();
 
-#endif //RENDER_DEFS_H
+
+#endif //RENDER_WIN32_H
