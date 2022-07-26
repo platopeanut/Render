@@ -31,7 +31,8 @@ public:
     Camera(const Vec3 &eye, const Vec3 &view, const Vec3 &up, int width, int height, float distance, float near, float far);
     void generateViewingRay(int i, int j, Ray* ray) const;
     void rasterDeepImage(Byte* pFrameBuffer, const Scene& scene) const;
-    void shadeRay(Byte* pFrameBuffer, const Scene& scene) const;
+    Color shadeRay(const Ray& ray, const Scene& scene, float t0, float t1, int tracing_depth=3) const;
+    void render(Byte* pFrameBuffer, const Scene& scene) const;
 };
 
 #endif //RENDER_COMMON_H

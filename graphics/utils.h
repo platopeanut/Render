@@ -46,6 +46,7 @@ public:
     void multiply_(float s);
     Color multiply(float s) const;
     Color mix(const Color& color) const;
+    void mix_(const Color& color);
     void add_(const Color& color);
     void to256(int* out_r, int* out_g, int* out_b) const;
 

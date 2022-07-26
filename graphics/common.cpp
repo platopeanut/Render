@@ -1,5 +1,4 @@
 #include "common.h"
-#include <assert.h>
 
 /**
  *  class Camera
@@ -38,39 +37,43 @@ void Camera::rasterDeepImage(Byte *pFrameBuffer, const Scene& scene) const {
         }
     }
 }
-void Camera::shadeRay(Byte* pFrameBuffer, const Scene& scene) const {
+Color Camera::shadeRay(const Ray& ray, const Scene& scene, float t0, float t1, int tracing_depth) const {
+    HitRecord hitRecord;
+    scene.hit(ray, t0, t1, hitRecord);
+    if (hitRecord.t != Surface::noHit) {
+        Color c;
+        for (const auto &light: scene.lights) {
+//            c.add_(light->illuminate(ray, hitRecord));
+            c.add_(light->illuminate(ray, hitRecord, scene));
+        }
+        // Mirror Reflection
+        // r = d - 2(d*n)n
+        Vec3 r = ray.direction.sub(hitRecord.normal.multiply(2 * ray.direction.dot(hitRecord.normal)));
+        Vec3 p = ray.evaluate(hitRecord.t);
+        if (tracing_depth > 0 && hitRecord.surface->material->k_reflection > 0)
+            c.add_(shadeRay(Ray(p, r), scene, _near, _far, tracing_depth - 1)
+            .multiply(hitRecord.surface->material->k_reflection));
+        return c;
+    } else return bgColor;
+}
+void Camera::render(Byte* pFrameBuffer, const Scene& scene) const {
     int i = 0;
     Ray viewing_ray;
-    HitRecord hitRecord;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             generateViewingRay(x, y, &viewing_ray);
-            scene.hit(viewing_ray, _near, _far, hitRecord);
-            if (hitRecord.t != Surface::noHit) {
-                Color c;
-                for (const auto &light: scene.lights) {
-//                    c.add_(light->illuminate(viewing_ray, hitRecord));
-                    c.add_(light->illuminate(viewing_ray, hitRecord, scene));
-                }
-                int r, g, b;
-                c.to256(&r, &g, &b);
-                pFrameBuffer[i  ] = b;
-                pFrameBuffer[i+1] = g;
-                pFrameBuffer[i+2] = r;
-                pFrameBuffer[i+3] = 0;
-            } else {
-                int r, g, b;
-                bgColor.to256(&r, &g, &b);
-                pFrameBuffer[i  ] = b;
-                pFrameBuffer[i+1] = g;
-                pFrameBuffer[i+2] = r;
-                pFrameBuffer[i+3] = 0;
-            }
+            Color c = shadeRay(viewing_ray, scene, _near, _far);
+            int r, g, b;
+            c.to256(&r, &g, &b);
+            pFrameBuffer[i  ] = b;
+            pFrameBuffer[i+1] = g;
+            pFrameBuffer[i+2] = r;
+            pFrameBuffer[i+3] = 0;
             i += 4;
         }
     }
-
 }
+
 
 /**
  *  class Scene

@@ -104,6 +104,11 @@ Color Color::multiply(float s) const {
 Color Color::mix(const Color& color) const {
     return Color(r*color.r, g*color.g, b*color.b);
 }
+void Color::mix_(const Color& color) {
+    this->r *= color.r;
+    this->g *= color.g;
+    this->b *= color.b;
+}
 void Color::add_(const Color& color) {
     r = min(r + color.r, 1.0f);
     g = min(g + color.g, 1.0f);

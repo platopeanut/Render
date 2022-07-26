@@ -14,7 +14,7 @@ Color PointLight::illuminate(const Ray &ray, const HitRecord &hitRecord) const {
     Color k = hitRecord.surface->material->evaluate(l, ray.direction, hitRecord.normal);
     return k.mix(E);
 }
-
+// With Shadow Test
 Color PointLight::illuminate(const Ray &ray, const HitRecord &hitRecord, const Scene &scene) const {
     Vec3 x = ray.evaluate(hitRecord.t);
     Vec3 l = p.sub(x);
@@ -22,7 +22,7 @@ Color PointLight::illuminate(const Ray &ray, const HitRecord &hitRecord, const S
     l.normalize_();
 // Shadow Test
     HitRecord sRec;
-    scene.hit(Ray(x, l), 0.1, Surface::noHit, sRec);
+    scene.hit(Ray(x, l), 0.1, r, sRec);
     if (sRec.t != Surface::noHit) return Color();
     Color E = I.multiply(max(0, hitRecord.normal.dot(l)) * (float)1e4 / (r*r));
     Color k = hitRecord.surface->material->evaluate(l, ray.direction, hitRecord.normal);
