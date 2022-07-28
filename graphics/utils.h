@@ -24,6 +24,7 @@ public:
     Vec3 multiply(float s) const;
     void multiply_(float s);
     Vec3 divide(float s) const;
+    Vec3 reverse() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Vec3 &vec3);
 };

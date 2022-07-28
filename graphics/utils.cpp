@@ -54,6 +54,10 @@ float Vec3::length() const {
     return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
+Vec3 Vec3::reverse() const {
+    return Vec3(-x, -y, -z);
+}
+
 /**
  *  class Mat3
  */
