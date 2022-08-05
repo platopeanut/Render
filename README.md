@@ -1,6 +1,8 @@
 # Render
 > Software Renderer by Win32 and C++
 
+> Reference Book: "fundamentals of computer graphics(5th)"
+
 ## Directory Structure
 ~~~
 ├── display             // Output Interface of Image
@@ -15,10 +17,12 @@
 │   ├── materials.h
 │   ├── surfaces.cpp
 │   ├── surfaces.h
+│   ├── transformation.cpp
+│   ├── transformation.h
 │   ├── utils.cpp
 │   └── utils.h
-├── main.cpp            // Render Entry
-└── test.cpp            // Test Render Entry
+├── main.cpp            // Image-Order Render Entry
+└── test.cpp            // Object-Order Render Entry
 ~~~
 
 
