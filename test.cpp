@@ -1,20 +1,21 @@
 #include "display/win32.h"
 #include "graphics/transformation.h"
-#include <cassert>
 
 
 CubeFrame* cubeFrame;
 
 void init() {
     cubeFrame = new CubeFrame(Vec4(0, 0, -3, 0), 2);
-    Mat4 M_modeling, M_ortho, M_viewport;
+    Mat4 M_modeling, M_perspToOrtho, M_ortho, M_viewport;
     M_modeling = Transformation::transform(0,0,-3)
                  * Transformation::rotateX(30)
                  * Transformation::rotateY(30)
-                * Transformation::transform(0,0,3);
-    Viewing::orthoProject(M_ortho, -5, 5, -5, 5, -1, -10);
+                 * Transformation::transform(0,0,3);
+    Viewing::perspToOrtho(M_perspToOrtho, -1, -10);
+    Viewing::orthoProject(M_ortho, -2, 2, -2, 2, -1, -10);
     Viewing::viewport(M_viewport, WIDTH, HEIGHT);
-    cubeFrame->transform(M_viewport.dotM(M_ortho.dotM(M_modeling)));
+    cubeFrame->transform(M_viewport * M_ortho * M_perspToOrtho * M_modeling);
+    cubeFrame->divideW_();
     cubeFrame->show();
 }
 

@@ -11,6 +11,7 @@ public:
     float x, y, z, w;
     explicit Vec4(float x = 0, float y = 0, float z = 0, float w = 1.0f);
     Vec4 add(const Vec4& vec4) const;
+    void divideW_();
 };
 
 class Mat4 {
@@ -40,6 +41,7 @@ public:
                              float l, float r,
                              float b, float t,
                              float f, float n);
+    static void perspToOrtho(Mat4& mat4, float n, float f);
     static void viewport(Mat4& mat4, int width, int height);
 };
 
@@ -51,6 +53,7 @@ public:
     LineSeg(const Vec4 &from, const Vec4 &to);
     void transform(const Mat4& mat4);
     void render(Byte* pFrameBuffer, int width, int height) const;
+    void divideW_();
 };
 
 class WireFrame {
@@ -59,6 +62,7 @@ public:
     int size = 0;   // nums of lines
     void transform(const Mat4& mat4) const;
     void render(Byte* pFrameBuffer, int width, int height) const;
+    void divideW_() const;
     void show() const;
 };
 

@@ -13,6 +13,15 @@ Vec4 Vec4::add(const Vec4 &vec4) const {
     return Vec4(x + vec4.x, y + vec4.y, z + vec4.z, w + vec4.w);
 }
 
+void Vec4::divideW_() {
+    if (w != 0) {
+        x /= w;
+        y /= w;
+        z /= w;
+        w = 1.0f;
+    }
+}
+
 /**
  *  class Mat4
  */
@@ -148,6 +157,14 @@ void Viewing::viewport(Mat4 &mat4, int width, int height) {
     mat4.data[1][3] = (float) (height - 1) * 1.0f / 2;
 }
 
+void Viewing::perspToOrtho(Mat4 &mat4, float n, float f) {
+    mat4.setZero_();
+    mat4.data[0][0] = mat4.data[1][1] = n;
+    mat4.data[2][2] = n + f;
+    mat4.data[2][3] = -f * n;
+    mat4.data[3][2] = 1.0f;
+}
+
 /**
  *  class LineSeg
  */
@@ -202,6 +219,11 @@ void LineSeg::render(Byte *pFrameBuffer, int width, int height) const {
     }
 }
 
+void LineSeg::divideW_() {
+    from.divideW_();
+    to.divideW_();
+}
+
 /**
  *  class WireFrame
  */
@@ -225,6 +247,10 @@ void WireFrame::show() const {
                 lines[i].to.x, lines[i].to.y, lines[i].to.z);
         WriteConsoleA(hConsole, text, 128, nullptr, nullptr);
     }
+}
+
+void WireFrame::divideW_() const {
+    for (int i = 0; i < size; ++i) lines[i].divideW_();
 }
 
 /**
