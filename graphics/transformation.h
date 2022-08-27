@@ -50,8 +50,10 @@ class LineSeg {
 public:
     Vec4 from;
     Vec4 to;
+    LineSeg() = default;
     LineSeg(const Vec4 &from, const Vec4 &to);
-    void transform(const Mat4& mat4);
+    void transform_(const Mat4& mat4);
+    void transform(const Mat4& mat4, LineSeg& out) const;
     void render(Byte* pFrameBuffer, int width, int height) const;
     void divideW_();
 };
@@ -60,7 +62,8 @@ class WireFrame {
 public:
     LineSeg* lines = nullptr;
     int size = 0;   // nums of lines
-    void transform(const Mat4& mat4) const;
+    void transform_(const Mat4& mat4) const;
+    virtual void transform(const Mat4& mat4, WireFrame* out) const = 0;
     void render(Byte* pFrameBuffer, int width, int height) const;
     void divideW_() const;
     void show() const;
@@ -68,7 +71,10 @@ public:
 
 class CubeFrame: public WireFrame {
 public:
+    CubeFrame() = default;
     CubeFrame(const Vec4 &center, float width);
+    void transform(const Mat4 &mat4, WireFrame *out) const override;
+
     ~CubeFrame();
 };
 

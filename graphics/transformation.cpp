@@ -170,9 +170,14 @@ void Viewing::perspToOrtho(Mat4 &mat4, float n, float f) {
  */
 LineSeg::LineSeg(const Vec4 &from, const Vec4 &to) : from(from), to(to) {}
 
-void LineSeg::transform(const Mat4& mat4) {
+void LineSeg::transform_(const Mat4& mat4) {
     from = mat4 * from;
     to = mat4 * to;
+}
+
+void LineSeg::transform(const Mat4 &mat4, LineSeg& out) const {
+    out.from = mat4 * from;
+    out.to = mat4 * to;
 }
 
 void LineSeg::render(Byte *pFrameBuffer, int width, int height) const {
@@ -227,9 +232,9 @@ void LineSeg::divideW_() {
 /**
  *  class WireFrame
  */
-void WireFrame::transform(const Mat4 &mat4) const {
+void WireFrame::transform_(const Mat4 &mat4) const {
     for (int i = 0; i < size; ++i) {
-        lines[i].transform(mat4);
+        lines[i].transform_(mat4);
     }
 }
 
@@ -287,9 +292,20 @@ CubeFrame::CubeFrame(const Vec4 &center, float width) {
                       center.add(Vec4(-half, half, half, 1)));
 }
 
+
+void CubeFrame::transform(const Mat4 &mat4, WireFrame *out) const {
+    out->size = size;
+    out->lines = (LineSeg*) malloc(sizeof(LineSeg) * out->size);
+    for (int i = 0; i < out->size; ++i) {
+        lines[i].transform(mat4, out->lines[i]);
+    }
+}
+
 CubeFrame::~CubeFrame() {
     free(lines);
     lines = nullptr;
     size = 0;
 }
+
+
 
